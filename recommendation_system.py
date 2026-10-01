@@ -25,6 +25,11 @@ def _tokens(item: Item) -> Counter[str]:
 	return Counter(re.findall(r"\w+", text.casefold()))
 
 
+def shared_terms(left: Item, right: Item) -> list[str]:
+	"""Return the unique normalized terms shared by two items."""
+	return sorted(_tokens(left).keys() & _tokens(right).keys())
+
+
 def load_items(csv_path: str | Path) -> list[Item]:
 	"""Load items from a CSV with id, title, and tags columns."""
 	with Path(csv_path).open(encoding="utf-8-sig", newline="") as csv_file:
@@ -98,9 +103,11 @@ def main() -> int:
 		print("No similar items found.")
 		return 0
 
+	selected = next(item for item in items if item.item_id == args.item)
 	print(f"Recommendations for {args.item}:")
 	for item, score in results:
-		print(f"{item.item_id}\t{item.title}\t{score:.0%}")
+		matches = ", ".join(shared_terms(selected, item))
+		print(f"{item.item_id}\t{item.title}\t{score:.0%}\tMatches: {matches}")
 	return 0
 
 

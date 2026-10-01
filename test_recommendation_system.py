@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from recommendation_system import Item, load_items, recommend
+from recommendation_system import Item, load_items, recommend, shared_terms
 
 
 class RecommendationTests(unittest.TestCase):
@@ -19,6 +19,11 @@ class RecommendationTests(unittest.TestCase):
 
         self.assertEqual([item.item_id for item, _ in results], ["b"])
         self.assertGreater(results[0][1], 0)
+
+    def test_shared_terms_are_unique_and_normalized(self) -> None:
+        terms = shared_terms(self.items[0], self.items[1])
+
+        self.assertEqual(terms, ["fiction", "mission", "science", "space"])
 
     def test_unknown_id_and_invalid_limit_are_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "Item id not found"):

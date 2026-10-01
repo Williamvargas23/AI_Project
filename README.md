@@ -35,7 +35,8 @@ movie-001,Example film,science fiction|adventure,Space exploration
 ```
 
 Recommendations exclude the selected item, show only items with at least one
-matching term, and are ordered by cosine similarity.
+matching term, and are ordered by cosine similarity. Each result also lists the
+normalized terms it shares with the selected item.
 
 ## Tests
 
